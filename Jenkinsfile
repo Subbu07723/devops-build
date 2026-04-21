@@ -4,8 +4,7 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS = 'dockerhub-cred'
         DOCKERHUB_USER = 'subbulakshmisenthilmurugan'
-        DEV_IMAGE = "${subbulakshmisenthilmurugan}/dev:latest"
-        PROD_IMAGE = "${subbulakshmisenthilmurugan}/prod:latest"
+        IMAGE = "${subbulakshmisenthilmurugan}/dev:latest"
     }
 
     stages {
@@ -16,87 +15,25 @@ pipeline {
             }
         }
 
-        stage('Detect Branch') {
-            steps {
-                script {
-                    echo "Building branch: ${env.BRANCH_NAME}"
-                }
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
-                script {
-                    sh 'docker build -t myapp .'
-                }
+                sh 'docker build -t myapp .'
             }
         }
 
-        stage('Tag Image (Dev)') {
-            when {
-                branch 'dev'
-            }
+        stage('Tag Image') {
             steps {
-                script {
-                    sh "docker tag myapp ${DEV_IMAGE}"
-                }
+                sh "docker tag myapp ${IMAGE}"
             }
         }
 
-        stage('Tag Image (Prod)') {
-            when {
-                branch 'master'
-            }
-            steps {
-                script {
-                    sh "docker tag myapp ${PROD_IMAGE}"
-                }
-            }
-        }
-
-        stage('Push to Dev Docker Hub') {
-            when {
-                branch 'dev'
-            }
+        stage('Push Image') {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
-                        sh "docker push ${DEV_IMAGE}"
+                        sh "docker push ${IMAGE}"
                     }
                 }
-            }
-        }
-
-        stage('Push to Prod Docker Hub') {
-            when {
-                branch 'master'
-            }
-            steps {
-                script {
-                    docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
-                        sh "docker push ${PROD_IMAGE}"
-                    }
-                }
-            }
-        }
-
-        stage('Deploy (Dev)') {
-            when {
-                branch 'dev'
-            }
-            steps {
-                echo "Deploying DEV container..."
-                sh "docker run -d -p 3000:3000 ${DEV_IMAGE} || true"
-            }
-        }
-
-        stage('Deploy (Prod)') {
-            when {
-                branch 'master'
-            }
-            steps {
-                echo "Deploying PROD container..."
-                sh "docker run -d -p 80:80 ${PROD_IMAGE} || true"
             }
         }
     }
