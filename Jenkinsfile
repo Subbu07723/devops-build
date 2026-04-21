@@ -11,7 +11,9 @@ pipeline {
 
         stage('Push to DEV') {
             when {
-                expression { env.BRANCH_NAME.contains('dev') }
+                expression { 
+                    return sh(script: "git branch --show-current", returnStdout: true).trim() == "dev"
+                }
             }
             steps {
                 sh 'docker tag myapp subbulakshmisenthilmurugan/dev:latest'
@@ -21,7 +23,9 @@ pipeline {
 
         stage('Push to PROD') {
             when {
-                expression { env.BRANCH_NAME.contains('master') }
+                expression { 
+                    return sh(script: "git branch --show-current", returnStdout: true).trim() == "master"
+                }
             }
             steps {
                 sh 'docker tag myapp subbulakshmisenthilmurugan/prod:latest'
