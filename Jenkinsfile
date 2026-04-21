@@ -10,7 +10,9 @@ pipeline {
         }
 
         stage('Push to DEV') {
-            when { branch 'dev' }
+            when {
+                expression { env.BRANCH_NAME == 'dev' }
+            }
             steps {
                 sh 'docker tag myapp subbulakshmisenthilmurugan/dev:latest'
                 sh 'docker push subbulakshmisenthilmurugan/dev:latest'
@@ -18,7 +20,9 @@ pipeline {
         }
 
         stage('Push to PROD') {
-            when { branch 'master' }
+            when {
+                expression { env.BRANCH_NAME == 'master' }
+            }
             steps {
                 sh 'docker tag myapp subbulakshmisenthilmurugan/prod:latest'
                 sh 'docker push subbulakshmisenthilmurugan/prod:latest'
