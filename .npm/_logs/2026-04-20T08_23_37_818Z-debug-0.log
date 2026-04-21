@@ -1,0 +1,31 @@
+0 verbose cli /usr/bin/node /usr/bin/npm
+1 info using npm@10.8.2
+2 info using node@v18.20.8
+3 silly config load:file:/usr/lib/node_modules/npm/npmrc
+4 silly config load:file:/home/ubuntu/.npmrc
+5 silly config load:file:/usr/etc/npmrc
+6 verbose title npm run
+7 verbose argv "run"
+8 verbose logfile logs-max:10 dir:/home/ubuntu/.npm/_logs/2026-04-20T08_23_37_818Z-
+9 verbose logfile /home/ubuntu/.npm/_logs/2026-04-20T08_23_37_818Z-debug-0.log
+10 silly logfile done cleaning log files
+11 verbose stack JSONParseError: Invalid package.json: JSONParseError: Unexpected token ":" (0x3A) in JSON at position 9 while parsing near "\"scripts\": {\n  \"start\": \"node..."
+11 verbose stack     at parse (/usr/lib/node_modules/npm/node_modules/@npmcli/package-json/lib/read-package.js:19:21)
+11 verbose stack     at PackageJson.fromJSON (/usr/lib/node_modules/npm/node_modules/@npmcli/package-json/lib/index.js:161:22)
+11 verbose stack     at PackageJson.load (/usr/lib/node_modules/npm/node_modules/@npmcli/package-json/lib/index.js:156:17)
+11 verbose stack     at async PackageJson.normalize (/usr/lib/node_modules/npm/node_modules/@npmcli/package-json/lib/index.js:116:5)
+11 verbose stack     at async #list (/usr/lib/node_modules/npm/lib/commands/run-script.js:144:41)
+11 verbose stack     at async RunScript.exec (/usr/lib/node_modules/npm/lib/commands/run-script.js:41:7)
+11 verbose stack     at async Npm.exec (/usr/lib/node_modules/npm/lib/npm.js:207:9)
+11 verbose stack     at async module.exports (/usr/lib/node_modules/npm/lib/cli/entry.js:74:5)
+12 error code EJSONPARSE
+13 error JSON.parse Invalid package.json: JSONParseError: Unexpected token ":" (0x3A) in JSON at position 9 while parsing near "\"scripts\": {\n  \"start\": \"node..."
+14 error JSON.parse Failed to parse JSON data.
+14 error JSON.parse Note: package.json must be actual JSON, not just JavaScript.
+15 verbose cwd /home/ubuntu
+16 verbose os Linux 6.17.0-1010-aws
+17 verbose node v18.20.8
+18 verbose npm  v10.8.2
+19 verbose exit 1
+20 verbose code 1
+21 error A complete log of this run can be found in: /home/ubuntu/.npm/_logs/2026-04-20T08_23_37_818Z-debug-0.log
