@@ -11,7 +11,7 @@ pipeline {
 
         stage('Push to DEV') {
             when {
-                expression { env.BRANCH_NAME == 'dev' }
+                expression { env.BRANCH_NAME.contains('dev') }
             }
             steps {
                 sh 'docker tag myapp subbulakshmisenthilmurugan/dev:latest'
@@ -21,7 +21,7 @@ pipeline {
 
         stage('Push to PROD') {
             when {
-                expression { env.BRANCH_NAME == 'master' }
+                expression { env.BRANCH_NAME.contains('master') }
             }
             steps {
                 sh 'docker tag myapp subbulakshmisenthilmurugan/prod:latest'
