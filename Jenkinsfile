@@ -3,23 +3,31 @@ pipeline {
 
     stages {
 
-        stage('Build Dev') {
-            when {
-                branch 'dev'
-            }
+        stage('Check Branch') {
             steps {
-                sh 'docker build -t subbulakshmisenthilmurugan/dev:latest .'
-                sh 'docker push subbulakshmisenthilmurugan/dev:latest'
+                sh 'echo Branch is: $GIT_BRANCH'
             }
         }
 
-        stage('Build Prod') {
-            when {
-                branch 'master'
-            }
+        stage('Build & Push Dev') {
             steps {
-                sh 'docker build -t subbulakshmisenthilmurugan/prod:latest .'
-                sh 'docker push subbulakshmisenthilmurugan/prod:latest'
+                sh '''
+                if [ "$GIT_BRANCH" = "origin/dev" ]; then
+                    docker build -t subbulakshmisenthilmurugan/dev:latest .
+                    docker push subbulakshmisenthilmurugan/dev:latest
+                fi
+                '''
+            }
+        }
+
+        stage('Build & Push Prod') {
+            steps {
+                sh '''
+                if [ "$GIT_BRANCH" = "origin/master" ]; then
+                    docker build -t subbulakshmisenthilmurugan/prod:latest .
+                    docker push subbulakshmisenthilmurugan/prod:latest
+                fi
+                '''
             }
         }
     }
