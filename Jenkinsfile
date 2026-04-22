@@ -11,23 +11,31 @@ pipeline {
 
         stage('Build & Push Dev') {
             steps {
-                sh '''
-                if [ "$GIT_BRANCH" = "origin/dev" ]; then
-                    docker build -t subbulakshmisenthilmurugan/dev:latest .
-                    docker push subbulakshmisenthilmurugan/dev:latest
-                fi
-                '''
+                script {
+                    if (env.GIT_BRANCH == "origin/dev") {
+
+                        sh 'docker build -t subbulakshmisenthilmurugan/dev:latest .'
+
+                        withDockerRegistry([credentialsId: 'dockerhub-cred']) {
+                            sh 'docker push subbulakshmisenthilmurugan/dev:latest'
+                        }
+                    }
+                }
             }
         }
 
         stage('Build & Push Prod') {
             steps {
-                sh '''
-                if [ "$GIT_BRANCH" = "origin/master" ]; then
-                    docker build -t subbulakshmisenthilmurugan/prod:latest .
-                    docker push subbulakshmisenthilmurugan/prod:latest
-                fi
-                '''
+                script {
+                    if (env.GIT_BRANCH == "origin/master") {
+
+                        sh 'docker build -t subbulakshmisenthilmurugan/prod:latest .'
+
+                        withDockerRegistry([credentialsId: 'dockerhub-cred']) {
+                            sh 'docker push subbulakshmisenthilmurugan/prod:latest'
+                        }
+                    }
+                }
             }
         }
     }
