@@ -5,38 +5,30 @@ pipeline {
 
         stage('Check Branch') {
             steps {
-                script {
-                    echo "Branch is: ${env.GIT_BRANCH}"
-                }
+                echo "Branch is: ${env.GIT_BRANCH}"
             }
         }
 
         stage('Build & Push Dev') {
             when {
-                expression { env.GIT_BRANCH == 'origin/dev' }
+                branch 'dev'
             }
             steps {
-                script {
-                    sh 'docker build -t subbulakshmisenthilmurugan/dev:latest .'
-                    
-                    withDockerRegistry([credentialsId: 'docker-cred', url: '']) {
-                        sh 'docker push subbulakshmisenthilmurugan/dev:latest'
-                    }
+                sh 'docker build -t subbulakshmisenthilmurugan/dev:latest .'
+                withDockerRegistry([credentialsId: 'docker-cred', url: '']) {
+                    sh 'docker push subbulakshmisenthilmurugan/dev:latest'
                 }
             }
         }
 
         stage('Build & Push Prod') {
             when {
-                expression { env.GIT_BRANCH == 'origin/master' }
+                branch 'master'
             }
             steps {
-                script {
-                    sh 'docker build -t subbulakshmisenthilmurugan/prod:latest .'
-                    
-                    withDockerRegistry([credentialsId: 'docker-cred', url: '']) {
-                        sh 'docker push subbulakshmisenthilmurugan/prod:latest'
-                    }
+                sh 'docker build -t subbulakshmisenthilmurugan/prod:latest .'
+                withDockerRegistry([credentialsId: 'docker-cred', url: '']) {
+                    sh 'docker push subbulakshmisenthilmurugan/prod:latest'
                 }
             }
         }
