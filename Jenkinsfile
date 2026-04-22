@@ -11,7 +11,7 @@ pipeline {
 
         stage('Build & Push Dev') {
             when {
-                branch 'dev'
+                expression { env.GIT_BRANCH == 'origin/dev' }
             }
             steps {
                 sh 'docker build -t subbulakshmisenthilmurugan/dev:latest .'
@@ -23,7 +23,7 @@ pipeline {
 
         stage('Build & Push Prod') {
             when {
-                branch 'master'
+                expression { env.GIT_BRANCH == 'origin/master' }
             }
             steps {
                 sh 'docker build -t subbulakshmisenthilmurugan/prod:latest .'
