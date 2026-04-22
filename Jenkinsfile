@@ -4,25 +4,19 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS = 'dockerhub-cred'
         DOCKERHUB_USER = 'subbulakshmisenthilmurugan'
-        DEV_IMAGE = "${subbulakshmisenthilmurugan}/dev:latest"
-        PROD_IMAGE = "${subbulakshmisenthilmurugan}/prod:latest"
+        DEV_IMAGE = "${DOCKERHUB_USER}/dev:latest"
+        PROD_IMAGE = "${DOCKERHUB_USER}/prod:latest"
     }
 
     stages {
-
-        stage('Checkout') {
-            steps {
-                git branch: "${env.BRANCH_NAME}", url: 'https://github.com/YOUR-REPO.git'
-            }
-        }
 
         stage('Build Docker Image') {
             steps {
                 script {
                     if (env.BRANCH_NAME == "dev") {
-                        docker.build("${DEV_IMAGE}")
+                        docker.build(DEV_IMAGE)
                     } else if (env.BRANCH_NAME == "master") {
-                        docker.build("${PROD_IMAGE}")
+                        docker.build(PROD_IMAGE)
                     }
                 }
             }
@@ -33,9 +27,9 @@ pipeline {
                 script {
                     docker.withRegistry('', DOCKERHUB_CREDENTIALS) {
                         if (env.BRANCH_NAME == "dev") {
-                            docker.image("${DEV_IMAGE}").push()
+                            docker.image(DEV_IMAGE).push()
                         } else if (env.BRANCH_NAME == "master") {
-                            docker.image("${PROD_IMAGE}").push()
+                            docker.image(PROD_IMAGE).push()
                         }
                     }
                 }
